@@ -1,0 +1,23 @@
+﻿@page
+@model QuanLyLop2_ASP.NETCore.Pages.TaoBaiModel
+
+<h2>Tạo bài kiểm tra</h2>
+
+<form method="post">
+
+    <div>
+        <label>Tên bài:</label><br />
+        <input asp-for="Bai.TenBai" />
+    </div>
+
+    <br />
+
+    <div>
+        <label>Nội dung:</label><br />
+        <textarea asp-for="Bai.NoiDung"></textarea>
+    </div>
+
+    <br />
+
+    <button type="submit">Tạo bài</button>
+</form>

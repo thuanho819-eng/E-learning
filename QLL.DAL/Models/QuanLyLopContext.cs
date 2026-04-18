@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
 #nullable disable
 
 namespace QLL.DAL.Models
@@ -11,13 +10,14 @@ namespace QLL.DAL.Models
         public QuanLyLopContext()
         {
         }
-
         public QuanLyLopContext(DbContextOptions<QuanLyLopContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<AdminDb> AdminDbs { get; set; }
+        public DbSet<BaiLam> BaiLams { get; set; }
+        public DbSet<BaiKiemTra> BaiKiemTras { get; set; }
+    public virtual DbSet<AdminDb> AdminDbs { get; set; }
         public virtual DbSet<DiemDb> DiemDbs { get; set; }
         public virtual DbSet<GiaoVienDb> GiaoVienDbs { get; set; }
         public virtual DbSet<Hoc> Hocs { get; set; }

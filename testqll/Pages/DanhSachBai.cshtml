@@ -1,0 +1,86 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@model QuanLyLop2_ASP.NETCore.Pages.DanhSachBaiModel
+@if (TempData["msg"] != null)
+{
+    <div style="color:yellow">
+        @TempData["msg"]
+    </div>
+}
+@{
+    Layout = "_Layout";
+}
+
+@{
+    ViewData["Title"] = "Danh sách bài kiểm tra";
+}
+@section menu {
+    <div class="left" id="left">
+        <div class="menu">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/DanhSachBai">Quản lý bài kiểm tra</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/TaoBai">Tạo bài kiểm tra</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+
+<script>
+    var dataBai = @Html.Raw(JsonSerializer.Serialize(Model.lstBai));
+</script>
+
+<h1 class="text-center">Danh sách bài kiểm tra</h1>
+
+<form method="post">
+    <input type="number" asp-for="maBai" placeholder="Nhập mã bài" />
+    <button style="margin: 10px 0px" type="button" onclick="openModalMH(null);" class="btn btn-outline-primary btn-sm">Tìm</button>
+
+</form>
+
+<button style="margin: 10px 0px" type="button" onclick="openModalMH(null);" class="btn btn-outline-primary btn-sm">+ Thêm bài</button>
+
+ <table id="tableMH" class="table table-striped text-white">
+    <tr>
+        <th>Mã</th>
+        <th>Tên</th>
+        <th>Ngày</th>
+        <th></th>
+    </tr>
+
+@foreach (var b in Model.lstBai)
+{
+    <tr>
+        <td>@b.MaBai</td>
+        <td>@b.TenBai</td>
+        <td>@b.NgayTao</td>
+        <td>
+            <a asp-page="/LamBai" asp-route-id="@b.MaBai">Làm</a>
+        </td>
+    </tr>
+}
+</table>
+
+<script>
+function openModal(){
+    let ten = prompt("Tên bài:");
+    let nd = prompt("Nội dung:");
+
+    let obj = {
+        TenBai: ten,
+        NoiDung: nd
+    };
+
+    fetch("?handler=Add", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "bai=" + JSON.stringify(obj)
+    }).then(res => location.reload());
+}
+</script>

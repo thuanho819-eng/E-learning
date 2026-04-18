@@ -1,0 +1,27 @@
+﻿@page
+@model QuanLyLop2_ASP.NETCore.Pages.LamBaiModel
+
+@section menu {
+    <div class="left">
+        <div class="menu">
+            <ul class="navbar-nav">
+                <li><a asp-page="/DanhSachBai">Danh sách bài</a></li>
+            </ul>
+        </div>
+    </div>
+}
+
+<h2>@Model.bai?.TenBai</h2>
+
+<p>@Model.bai?.NoiDung</p>
+
+<form method="post">
+
+    <input type="hidden" asp-for="MaBai" />
+
+    <textarea asp-for="NoiDungTraLoi" rows="5" cols="50"></textarea>
+
+    <br />
+
+    <button type="submit">Nộp bài</button>
+</form>
