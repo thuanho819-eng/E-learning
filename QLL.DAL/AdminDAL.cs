@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using QLL.DAL.Models;
 using QLL.DTO;
+using Microsoft.Data.SqlClient;
 
 namespace QLL.DAL
 {

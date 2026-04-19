@@ -27,7 +27,7 @@ namespace QLL.BLL
             return dal.GetById(id);
         }
 
-        // 👉 THÊM GIỐNG ADMIN
+       
         public IList<BaiKiemTraDTO> GetAll()
         {
             return dal.GetAll();

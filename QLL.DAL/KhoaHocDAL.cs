@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using QLL.DAL.Models;
 using QLL.DTO;
+using Microsoft.Data.SqlClient;
+
 
 namespace QLL.DAL
 {

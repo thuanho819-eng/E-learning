@@ -9,12 +9,12 @@ namespace QLL.DAL.Models
 {
     public class BaiKiemTra
     {
-        [Key] // 👈 bắt buộc
+        [Key] 
         public int MaBai { get; set; }
 
         public string TenBai { get; set; }
-        public string NoiDung { get; set; }
+        public string? NoiDung { get; set; }
         public DateTime NgayTao { get; set; }
-        public string MaGv { get; set; }
+        public string? MaGv { get; set; }
     }
 }

@@ -1,86 +1,103 @@
 ﻿@page
 @using QLL.DTO
-@using System.Text.Json
+@using Microsoft.AspNetCore.Http
 @model QuanLyLop2_ASP.NETCore.Pages.DanhSachBaiModel
-@if (TempData["msg"] != null)
-{
-    <div style="color:yellow">
-        @TempData["msg"]
-    </div>
-}
-@{
-    Layout = "_Layout";
-}
 
 @{
     ViewData["Title"] = "Danh sách bài kiểm tra";
 }
-@section menu {
-    <div class="left" id="left">
-        <div class="menu">
-            <ul class="navbar-nav flex-grow-1">
-                <li class="nav-item">
-                    <a class="nav-link" asp-page="/DanhSachBai">Quản lý bài kiểm tra</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-page="/TaoBai">Tạo bài kiểm tra</a>
-                </li>
-            </ul>
-        </div>
+
+@if (TempData["msg"] != null)
+{
+    var msg = TempData["msg"].ToString();
+    TempData.Remove("msg");
+
+    <div class="alert alert-success">
+        @msg
     </div>
 }
 
-<script>
-    var dataBai = @Html.Raw(JsonSerializer.Serialize(Model.lstBai));
-</script>
-
-<h1 class="text-center">Danh sách bài kiểm tra</h1>
-
-<form method="post">
-    <input type="number" asp-for="maBai" placeholder="Nhập mã bài" />
-    <button style="margin: 10px 0px" type="button" onclick="openModalMH(null);" class="btn btn-outline-primary btn-sm">Tìm</button>
-
-</form>
-
-<button style="margin: 10px 0px" type="button" onclick="openModalMH(null);" class="btn btn-outline-primary btn-sm">+ Thêm bài</button>
-
- <table id="tableMH" class="table table-striped text-white">
-    <tr>
-        <th>Mã</th>
-        <th>Tên</th>
-        <th>Ngày</th>
-        <th></th>
-    </tr>
-
-@foreach (var b in Model.lstBai)
+@section menu_nav
 {
-    <tr>
-        <td>@b.MaBai</td>
-        <td>@b.TenBai</td>
-        <td>@b.NgayTao</td>
-        <td>
-            <a asp-page="/LamBai" asp-route-id="@b.MaBai">Làm</a>
-        </td>
-    </tr>
+    <li>
+        <img src="~/images/avatar.png" class="rounded-circle" style="height:35px;">
+    </li>
+
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link text-dark">
+            @HttpContext.Session.GetString("user_id")
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link btn btn-outline-danger" asp-page="/Index">Đăng xuất</a>
+    </li>
 }
-</table>
 
-<script>
-function openModal(){
-    let ten = prompt("Tên bài:");
-    let nd = prompt("Nội dung:");
-
-    let obj = {
-        TenBai: ten,
-        NoiDung: nd
-    };
-
-    fetch("?handler=Add", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "bai=" + JSON.stringify(obj)
-    }).then(res => location.reload());
+@section menu
+{
+    @if (HttpContext.Session.GetString("user_id").StartsWith("hs"))
+    {
+        <partial name="~/Pages/Shared/_Menu_HS.cshtml" />
+    }
+    else if (HttpContext.Session.GetString("user_id").StartsWith("gv"))
+    {
+        <partial name="~/Pages/Shared/_Menu_GV.cshtml" />
+    }
 }
-</script>
+
+<div>
+    <h1 class="display-4 text-center">Danh sách bài kiểm tra</h1>
+
+    <table class="table table-striped text-white">
+        <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Tên bài</th>
+                <th>Ngày</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var b in Model.lstBai)
+        {
+            <tr>
+                <td>@b.MaBai</td>
+                <td>@b.TenBai</td>
+                <td>@b.NgayTao</td>
+               <td>
+   @if (HttpContext.Session.GetString("user_id").StartsWith("hs"))
+{
+    var baiLam = Model.dsBaiLam.FirstOrDefault(x => x.MaBai == b.MaBai);
+
+    if (baiLam == null)
+    {
+        <a asp-page="/LamBai" asp-route-id="@b.MaBai" class="btn btn-primary btn-sm">
+            Làm
+        </a>
+    }
+    else if (baiLam.Diem == null)
+    {
+        <span class="badge bg-warning text-dark">Đã nộp</span>
+    }
+    else
+    {
+        <span class="badge bg-success">Điểm: @baiLam.Diem</span>
+    }
+}
+
+@if (HttpContext.Session.GetString("user_id").StartsWith("gv"))
+{
+    <a asp-page="/ChamBai" asp-route-maBai="@b.MaBai"
+       class="btn btn-warning btn-sm">
+        Chấm bài
+    </a>
+}
+
+</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

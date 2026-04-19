@@ -22,16 +22,19 @@ namespace QLL.BLL
             return dal.Add(dto);
         }
 
-        // 👉 (nên có) lấy bài đã làm theo MaBai
         public IList<BaiLamDTO> GetByBai(int maBai)
         {
             return dal.GetByBai(maBai);
         }
 
-        // 👉 (nên có) lấy theo học sinh
         public IList<BaiLamDTO> GetByHocSinh(string maHs)
         {
             return dal.GetByHocSinh(maHs);
+        }
+
+        public void Update(BaiLamDTO dto)
+        {
+            dal.Update(dto);
         }
     }
 }

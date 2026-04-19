@@ -1,11 +1,3 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using QLL.BLL;
-using QLL.DTO;
-using System;
-using System.Collections.Generic;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
@@ -14,6 +6,7 @@ using QLL.BLL;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace QuanLyLop2_ASP.NETCore.Pages
 {
@@ -22,6 +15,7 @@ namespace QuanLyLop2_ASP.NETCore.Pages
         private BaiKiemTraBLL bus;
 
         public List<BaiKiemTraDTO> lstBai;
+        public List<BaiLamDTO> dsBaiLam = new List<BaiLamDTO>();
 
         [BindProperty]
         public int maBai { get; set; }
@@ -35,6 +29,16 @@ namespace QuanLyLop2_ASP.NETCore.Pages
         {
             var data = bus.GetAll();
             lstBai = data != null ? data.ToList() : new List<BaiKiemTraDTO>();
+
+            var user = HttpContext.Session.GetString("user_id");
+
+            if (!string.IsNullOrEmpty(user) && user.StartsWith("hs"))
+            {
+                dsBaiLam = new BaiLamBLL()
+                                .GetByHocSinh(user)?
+                                .ToList()
+                            ?? new List<BaiLamDTO>();
+            }
         }
 
         public void OnPost()
@@ -48,8 +52,6 @@ namespace QuanLyLop2_ASP.NETCore.Pages
                 lstBai = bus.GetAll()?.ToList() ?? new List<BaiKiemTraDTO>();
             }
         }
-
-        // 👉 AJAX ADD
         public IActionResult OnPostAdd(string bai)
         {
             var obj = JsonSerializer.Deserialize<BaiKiemTraDTO>(bai);
@@ -65,5 +67,6 @@ namespace QuanLyLop2_ASP.NETCore.Pages
 
             return new ObjectResult(new { success = false }) { StatusCode = 500 };
         }
+        
     }
 }

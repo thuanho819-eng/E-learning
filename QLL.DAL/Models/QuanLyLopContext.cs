@@ -425,6 +425,66 @@ namespace QLL.DAL.Models
                     .HasConstraintName("FK_TKBDb_KhoaHocDb");
             });
 
+            modelBuilder.Entity<BaiKiemTra>(entity =>
+            {
+                entity.HasKey(e => e.MaBai);
+
+                entity.ToTable("BaiKiemTra");
+
+                entity.Property(e => e.MaBai).HasColumnName("MaBai");
+
+                entity.Property(e => e.TenBai)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.NoiDung)
+                    .IsRequired();
+
+                entity.Property(e => e.NgayTao)
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.MaGv)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .HasColumnName("MaGV");
+
+                entity.HasOne<GiaoVienDb>()
+                    .WithMany()
+                    .HasForeignKey(e => e.MaGv)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BaiKiemTra_GiaoVien");
+            });
+
+            modelBuilder.Entity<BaiLam>(entity =>
+            {
+                entity.HasKey(e => e.MaBaiLam);
+
+                entity.ToTable("BaiLam");
+
+                entity.Property(e => e.MaBai);
+
+                entity.Property(e => e.MaHs)
+                    .IsRequired()
+                    .HasMaxLength(5);
+
+                entity.Property(e => e.NoiDungTraLoi);
+
+                entity.Property(e => e.Diem);
+
+                // 🔥 THÊM FK BẮT BUỘC
+                entity.HasOne<BaiKiemTra>()
+                    .WithMany()
+                    .HasForeignKey(e => e.MaBai)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BaiLam_BaiKiemTra");
+
+                entity.HasOne<HocSinhDb>()
+                    .WithMany()
+                    .HasForeignKey(e => e.MaHs)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BaiLam_HocSinh");
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 

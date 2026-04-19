@@ -1,23 +1,56 @@
 ﻿@page
 @model QuanLyLop2_ASP.NETCore.Pages.TaoBaiModel
+@using QLL.DTO
+@using System.Text.Json
+@if (TempData["msg"] != null)
+{
+    var msg = TempData["msg"].ToString();
+    TempData.Remove("msg"); 
 
-<h2>Tạo bài kiểm tra</h2>
+    <div style="color:yellow">
+        @msg
+    </div>
+}
+@{
+    Layout = "_Layout";
+}
+
+@{
+    ViewData["Title"] = "Danh sách bài kiểm tra";
+}    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/GiaoVien">Thoát</a>
+    </li>
+
+    @section menu {
+    <div class="left" id="left">
+        <div class="menu">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/DanhSachBai">Chấm Bài</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+
+
+<h1 class="text-center">Tạo bài kiểm tra</h1>
 
 <form method="post">
 
     <div>
-        <label>Tên bài:</label><br />
+        <label class="form-text text-light" >Tên bài:</label><br />
         <input asp-for="Bai.TenBai" />
     </div>
 
     <br />
 
     <div>
-        <label>Nội dung:</label><br />
-        <textarea asp-for="Bai.NoiDung"></textarea>
+        <label class="form-text text-light">Nội dung:</label><br />
+        <textarea asp-for="Bai.NoiDung" rows="6" cols="60" class="form-text"></textarea>
     </div>
 
     <br />
 
-    <button type="submit">Tạo bài</button>
+    <button type="submit" class="btn btn-success">Tạo bài</button>
 </form>

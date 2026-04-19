@@ -9,7 +9,7 @@ namespace QLL.DAL.Models
 {
     public class BaiLam
     {
-        [Key] // 👈 BẮT BUỘC
+        [Key] 
         public int MaBaiLam { get; set; }
 
         public int MaBai { get; set; }

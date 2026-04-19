@@ -1,0 +1,34 @@
+﻿@page "{maBai:int}"
+@model ChamBaiModel
+
+<h2>Chấm bài</h2>
+
+<table id="tableD"class="table table-striped text-white">
+    <tr>
+        <th>Học sinh</th>
+        <th>Bài làm</th>
+        <th>Điểm</th>
+        <th></th>
+    </tr>
+
+@foreach (var b in Model.dsBaiLam)
+{
+    <tr>
+        <td>@b.MaHs</td>
+        <td>@b.NoiDungTraLoi</td>
+        <td>
+            <form method="post">
+                <input type="hidden" name="MaBaiLam" value="@b.MaBaiLam" />
+
+                <input type="number" name="Diem" step="0.1" />
+
+                <button type="submit" class="btn btn-success btn-sm">
+                    Chấm
+                </button>
+
+
+            </form>
+        </td>
+    </tr>
+}
+</table>

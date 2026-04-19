@@ -36,6 +36,14 @@ namespace QuanLyLop2_ASP.NETCore.Pages
         {
             var user = HttpContext.Session.GetString("user_id");
 
+            TempData["msg"] = "USER = " + user + " | MaBai = " + MaBai;
+
+            if (string.IsNullOrEmpty(user))
+            {
+                TempData["msg"] = "Lỗi: chưa đăng nhập!";
+                return RedirectToPage("/Index");
+            }
+
             BaiLamDTO dto = new BaiLamDTO
             {
                 MaBai = MaBai,
@@ -47,9 +55,15 @@ namespace QuanLyLop2_ASP.NETCore.Pages
             var res = busLam.Add(dto);
 
             if (res != null)
+            {
+                TempData["msg"] = "Nộp bài thành công!";
                 return RedirectToPage("/DanhSachBai");
+            }
 
+            bai = busBai.GetById(MaBai);
+            TempData["msg"] = "Nộp bài thất bại!";
             return Page();
         }
+
     }
 }

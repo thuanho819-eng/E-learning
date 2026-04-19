@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using QLL.DTO;
+using Microsoft.Data.SqlClient;
 
 namespace QLL.DAL
 {
@@ -17,6 +18,7 @@ namespace QLL.DAL
 
         public BaiLamDTO Add(BaiLamDTO dto)
         {
+            BaiLamDTO res = new BaiLamDTO();
             try
             {
                 var entity = new BaiLam
@@ -39,7 +41,7 @@ namespace QLL.DAL
             }
         }
 
-        // 👉 LẤY DANH SÁCH THEO BÀI
+        //  LẤY DANH SÁCH THEO BÀI
         public IList<BaiLamDTO> GetByBai(int maBai)
         {
             List<BaiLamDTO> res = new List<BaiLamDTO>();
@@ -69,7 +71,7 @@ namespace QLL.DAL
             return res;
         }
 
-        // 👉 LẤY THEO HỌC SINH
+        // LẤY THEO HỌC SINH
         public IList<BaiLamDTO> GetByHocSinh(string maHs)
         {
             List<BaiLamDTO> res = new List<BaiLamDTO>();
@@ -93,11 +95,28 @@ namespace QLL.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                res = new List<BaiLamDTO>(); // ✔ KHÔNG BAO GIỜ NULL
+                Console.WriteLine("LỖI DB: " + ex.Message);
+
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("INNER: " + ex.InnerException.Message);
+                }
+
+                return null;
             }
 
             return res;
+        }
+
+        public void Update(BaiLamDTO dto)
+        {
+            var entity = db.BaiLams.FirstOrDefault(x => x.MaBaiLam == dto.MaBaiLam);
+
+            if (entity != null)
+            {
+                entity.Diem = dto.Diem;
+                db.SaveChanges();
+            }
         }
     }
 }

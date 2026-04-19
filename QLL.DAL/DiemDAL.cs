@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Data;
 using QLL.DAL.Models;
 using QLL.DTO;
@@ -137,20 +137,20 @@ namespace QLL.DAL
             string cnstr = "Server=DESKTOP-G84V7VV;Database=QuanLyLop;Integrated Security=True;TrustServerCertificate=True;Encrypt=False;";
             SqlConnection cnn = new SqlConnection(cnstr);
             List<PhoDiem> res = new List<PhoDiem>();
-            try 
+            try
             {
                 int f = 0;
                 string sqlstr = "select Diem, count(d.MaHS) as SL from DiemDb d inner join HocSinhDb hs on d.MaHS = hs.MaHS where";
-                if(maKh != 0)
+                if (maKh != 0)
                 {
                     if (f != 0)
                     {
                         sqlstr += " and d.MaKH = " + maKh.ToString();
-                        
+
                     }
                     else
                     {
-                        sqlstr += " d.MaKH = " + maKh.ToString();f = 1;
+                        sqlstr += " d.MaKH = " + maKh.ToString(); f = 1;
                     }
                 }
                 if (maLop != 0)
@@ -184,9 +184,9 @@ namespace QLL.DAL
                 da.SelectCommand = cmd;
                 DataSet ds = new DataSet();
                 da.Fill(ds);
-                if(ds.Tables.Count > 0)
+                if (ds.Tables.Count > 0)
                 {
-                    foreach(DataRow row in ds.Tables[0].Rows)
+                    foreach (DataRow row in ds.Tables[0].Rows)
                     {
                         PhoDiem ph = new PhoDiem();
                         ph.Diem = double.Parse(row["Diem"].ToString());
@@ -197,12 +197,15 @@ namespace QLL.DAL
 
 
             }
-            catch(Exception ex1)
+            catch (Exception ex1)
             {
                 res = null;
             }
             return res;
         }
+
+
+
         public bool Update(DiemDTO d)
         {
             bool res = false;

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using QLL.DTO;
+using Microsoft.Data.SqlClient;
 
 namespace QLL.DAL
 {
@@ -47,7 +48,6 @@ namespace QLL.DAL
             return res;
         }
 
-        // 👉 CHUẨN ADMIN STYLE
         public IList<BaiKiemTraDTO> GetAll()
         {
             List<BaiKiemTraDTO> res = new List<BaiKiemTraDTO>();
@@ -61,18 +61,18 @@ namespace QLL.DAL
                     BaiKiemTraDTO dto = new BaiKiemTraDTO();
 
                     dto.MaBai = b.MaBai;
-                    dto.TenBai = b.TenBai;
-                    dto.NoiDung = b.NoiDung;
+                    dto.TenBai = b.TenBai ?? "";
+                    dto.NoiDung = b.NoiDung ?? "";
                     dto.NgayTao = b.NgayTao;
-                    dto.MaGv = b.MaGv;
+                    dto.MaGv = b.MaGv ?? "";
 
                     res.Add(dto);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                // KHÔNG set null
+                Console.WriteLine("LỖI DB: " + ex.ToString()); 
+                throw; 
             }
 
             return res;
